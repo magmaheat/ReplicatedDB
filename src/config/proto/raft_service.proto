@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package config;
+
+option go_package = "/config/proto;raft_service";
+
+service RaftService {
+  rpc Set(KeyValue) returns (Response);
+  rpc Get(Key) returns (KeyValue);
+  rpc Delete(Key) returns (Response);
+  rpc Heartbeat(Empty) returns (HeartbeatResponse);
+  rpc GetLeader(Empty) returns (LeaderResponse);
+  rpc StopServer(Empty) returns(Response);
+  rpc GetAllServers(Empty) returns(AddressList);
+}
+
+message AddressList {
+  repeated string list = 1;
+}
+
+message KeyValue {
+  string key = 1;
+  string value = 2;
+}
+
+message Key {
+  string key = 1;
+}
+
+message Response {
+  bool success = 1;
+  string message = 2;
+}
+
+message HeartbeatResponse {
+  int32 replication_factor = 2;
+  string issue = 3;
+  string state = 4;
+}
+
+message Empty {}
+
+message LeaderResponse {
+  string leader = 1;
+  string leaderID = 2;
+  string issue = 3;
+}
